@@ -1,0 +1,22 @@
+# Cloudflare API 认证信息
+auth:
+  # 使用 API 令牌 (推荐) 或 API 密钥 + 邮箱
+  # 只需填写其中一种认证方式
+  # API 令牌可在 Cloudflare 仪表盘 -> 我的个人资料 -> API 令牌 中创建
+  api_token: ""
+  
+  # 或者使用传统的 API 密钥 + 邮箱认证 (不推荐)
+  api_key: ""
+  email: ""
+
+# 默认设置
+defaults:
+  ttl: 1  # 1 = 自动 (Cloudflare默认)
+  proxied: true  # 默认开启云朵(代理)
+
+# 界面设置
+ui:
+  theme: "dark"  # dark 或 light
+  records_per_page: 15
+
+
