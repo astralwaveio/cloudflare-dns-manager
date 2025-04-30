@@ -47,7 +47,7 @@ pip install -r requirements.txt
 2. **Global API 密钥 + 邮箱**: 提供完整的账户访问权限
    - 在 Cloudflare 仪表盘 -> 我的个人资料 -> API 令牌 -> API 密钥 中查看
 
-您也可以直接编辑 `config/config.yaml` 文件来配置这些信息:
+您也可以直接复制一份 `config/config.example.yaml` 到 `config/config.yaml` 文件来配置这些信息:
 
 ```yaml
 auth:
