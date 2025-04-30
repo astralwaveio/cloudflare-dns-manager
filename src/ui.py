@@ -1,19 +1,16 @@
 from textual.app import App
 from textual.widgets import Header, Footer, Static, Button, DataTable, Input, Checkbox, Label
-from textual.containers import Container, Vertical, Horizontal, Grid
+from textual.containers import Container, Vertical, Horizontal
 from textual.screen import Screen
 from textual.reactive import Reactive
 from textual.binding import Binding
-from textual.coordinate import Coordinate
-from textual import events
+from textual.widgets import Button
 from rich.align import Align
 from rich.panel import Panel
-from rich.text import Text
 from rich.console import Console
 
-import logging
 import asyncio
-from typing import Dict, List, Any, Optional, Callable, Tuple
+from typing import Any, Callable
 
 from src.models import Zone, DNSRecord
 from src.api import CloudflareAPI, CloudflareAPIError
@@ -80,13 +77,21 @@ class ZoneScreen(Screen):
                 self.zones_panel.update(Panel(Align("没有找到域名。请确认您的API权限和账户中是否有域名。", align="center"), title="无域名"))
             else:
                 table = DataTable()
+                table.add_rows([])
                 table.cursor_type = "row"
                 table.add_column("域名", width=40)
                 table.add_column("状态", width=10)
                 
+                # 创建一个行数据列表
+                rows = []
                 for zone in zones:
                     status = "[green]活跃[/]" if zone.status == "active" and not zone.paused else "[red]暂停[/]"
-                    table.add_row(zone.name, status)
+                    # 将每行数据作为一个列表添加到rows列表中
+                    rows.append([zone.name, status])
+                
+                # 使用add_rows一次性添加所有行
+                if rows:
+                    table.add_rows(rows)
                 
                 self.zones_panel.update(Panel(table, title=f"域名列表 ({len(zones)}个)"))
                 
@@ -194,6 +199,7 @@ class RecordsScreen(Screen):
                     title = f"批量操作模式 - 已选择 {len(self.selected_records)}/{len(records)} 个记录"
                 
                 table = DataTable()
+                table.add_rows([])
                 table.cursor_type = "row"
                 
                 # 如果在批量模式下，添加选择列
@@ -206,6 +212,8 @@ class RecordsScreen(Screen):
                 table.add_column("TTL", width=10)
                 table.add_column("代理", width=6)
                 
+                # 创建行列表
+                rows = []
                 for record in records:
                     # 格式化显示
                     record_type = record.type
@@ -214,16 +222,21 @@ class RecordsScreen(Screen):
                     ttl = format_ttl(record.ttl)
                     proxied = "[blue]是[/]" if record.proxied else "否"
                     
-                    # 添加行
+                    # 准备行数据
                     if self.batch_mode:
                         selected = "✓" if record.id in self.selected_records else ""
-                        table.add_row(selected, record_type, name, content, ttl, proxied)
+                        rows.append([selected, record_type, name, content, ttl, proxied])
                     else:
-                        table.add_row(record_type, name, content, ttl, proxied)
+                        rows.append([record_type, name, content, ttl, proxied])
+                
+                # 一次性添加所有行
+                if rows:
+                    table.add_rows(rows)
                 
                 self.records_panel.update(Panel(table, title=title))
                 
-        self.is_loading = False
+            self.is_loading = False
+
     
     async def on_data_table_row_selected(self, event):
         """当选择一条记录时"""
@@ -453,7 +466,7 @@ class RecordFormScreen(Screen):
         
         yield Footer()
         
-    async def on_button_pressed(self, event: events.ButtonPressed) -> None:
+    async def on_button_pressed(self, event: Button.Pressed) -> None:
         """按钮点击事件"""
         button_id = event.button.id
         
@@ -568,7 +581,7 @@ class ConfirmScreen(Screen):
             )
         )
         
-    async def on_button_pressed(self, event: events.ButtonPressed) -> None:
+    async def on_button_pressed(self, event: Button.Pressed) -> None:
         """按钮点击事件"""
         button_id = event.button.id
         
@@ -600,7 +613,7 @@ class MessageScreen(Screen):
             )
         )
         
-    async def on_button_pressed(self, event: events.ButtonPressed) -> None:
+    async def on_button_pressed(self, event: Button.Pressed) -> None:
         """按钮点击事件"""
         self.app.pop_screen()
 
@@ -636,7 +649,7 @@ class FilterScreen(Screen):
             )
         )
         
-    async def on_button_pressed(self, event: events.ButtonPressed) -> None:
+    async def on_button_pressed(self, event: Button.Pressed) -> None:
         """按钮点击事件"""
         button_id = event.button.id
         
@@ -699,7 +712,7 @@ class InitScreen(Screen):
         
         yield Footer()
         
-    async def on_button_pressed(self, event: events.ButtonPressed) -> None:
+    async def on_button_pressed(self, event: Button.Pressed) -> None:
         """按钮点击事件"""
         button_id = event.button.id
         

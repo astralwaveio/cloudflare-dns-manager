@@ -1,3 +1,15 @@
+textual==0.52.1
+typing_extensions>=4.8.0
+rich>=13.6.0
+importlib-metadata>=6.8.0
+requests>=2.31.0
+urllib3>=2.0.7
+certifi>=2023.7.22
+asyncio>=3.4.3
+pyyaml>=6.0.1
+python-dotenv>=1.0.0
+charset-normalizer==3.4.1
+idna==3.10
 linkify-it-py==2.0.3
 markdown-it-py==3.0.0
 mdit-py-plugins==0.4.2
@@ -6,7 +18,6 @@ platformdirs==4.3.7
 Pygments==2.19.1
 python-dotenv==1.1.0
 PyYAML==6.0.2
+requests==2.32.3
 rich==14.0.0
-textual==3.1.1
-typing_extensions==4.13.2
 uc-micro-py==1.0.3
