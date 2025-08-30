@@ -18,6 +18,6 @@ platformdirs==4.3.7
 Pygments==2.19.1
 python-dotenv==1.1.0
 PyYAML==6.0.2
-requests==2.32.3
+requests==2.32.4
 rich==14.0.0
 uc-micro-py==1.0.3
